@@ -294,8 +294,22 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const seekingArr = [];
+  for (let i = 0; i < ccn.toString().length; i += 1) {
+    seekingArr.push(+ccn.toString().charAt(i));
+  }
+  seekingArr.reverse();
+  for (let i = 1; i < seekingArr.length; i += 2) {
+    seekingArr[i] *= 2;
+    if (seekingArr[i] > 9) {
+      seekingArr[i] = +seekingArr[i].toString().charAt(0) + +seekingArr[i].toString().charAt(1);
+    }
+  }
+  if (seekingArr.reduce((acc, el) => acc + el, 0) % 10 === 0) {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -312,8 +326,17 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  const seekingArr = [];
+  for (let i = 0; i < num.toString().length; i += 1) {
+    seekingArr.push(+num.toString().charAt(i));
+  }
+  let result = seekingArr.reduce((acc, el) => acc + el, 0);
+  if (result > 9) {
+    result = +result.toString().charAt(0) + +result.toString().charAt(1);
+    return result;
+  }
+  return result;
 }
 
 
@@ -338,8 +361,24 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const opened = ['[', '{', '(', '<'];
+  const closed = [']', '}', ')', '>'];
+  const seekingArr = [];
+  for (let i = 0; i < str.length; i += 1) {
+    if (opened.includes(str[i])) {
+      seekingArr.push(str[i]);
+    } else if (closed.includes(str[i]) && seekingArr.length === 0) {
+      return false;
+    } else if (closed.includes(str[i])
+    && opened.indexOf(seekingArr[seekingArr.length - 1]) === closed.indexOf(str[i])) {
+      seekingArr.pop();
+    }
+  }
+  if (seekingArr.length === 0) {
+    return true;
+  }
+  return false;
 }
 
 
